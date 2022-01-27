@@ -4,46 +4,24 @@ namespace Program
 {
     public static class Program
     {
+        static int findHighst(double[] input)
+        {
+            int heighest = 0;
+            for (int i = 1; i < input.Length-1; i++)
+            {
+                if (input[heighest] < input[i])
+                {
+                    heighest = i;
+                }
+            }
+            return heighest;
+        }
         static void Main()
         {
-            double anschaffungskosten = 0; 
-            int nutzungsdauer = 0;
-            bool worked = false;
-
-
-            //inputing data
-
-            while (!worked)
-            {
-                Console.Write("geben sie die anschaffungskosten ein: ");
-                worked = double.TryParse(Console.ReadLine(), out anschaffungskosten);
-                if (!worked)
-                    Console.WriteLine("fwhler bei der eingabe");
-            }
-            worked = false;
-            while (!worked)
-            {
-                Console.Write("geben sie die nutzungsdauer ein: ");
-                worked = int.TryParse(Console.ReadLine(), out nutzungsdauer);
-                if (!worked)
-                    Console.WriteLine("fwhler bei der eingabe");
-            }
-
-            Console.Clear();
-            Console.WriteLine($"Nutzungsdauer:{nutzungsdauer,15}");
-            Console.WriteLine($"Anschaffungskosten:{anschaffungskosten,10}\n");
-            //working with the data
-            //              "0123456789 123456789 123456789 123456789 123456789 123456789 1234567"
-            string header = "Nutzungsjahr       Anfangswert         Abschreibung        Restwert ";
-            double anfangswert = anschaffungskosten, restwert = 0;
-            const double beschreibung = 1000;
-            Console.WriteLine(header);
-            for (int i = 0; i < nutzungsdauer; i++)
-            {
-                restwert = anfangswert - beschreibung;
-                Console.WriteLine($"{i+1,-20}{anfangswert,-20}{beschreibung,-20}{restwert,-20}");
-                anfangswert = restwert;
-            }
+            string[] tNamen = { "AGIP", "BP", "SHELL", "ESSO", "TOTAL" };
+            double[] tUms = { 11200.10, 23433.20, 7134.90, 14655.00, 4175.80 };
+            int index = findHighst(tUms);
+            Console.WriteLine($"Das Unternehmen {tNamen[index]} hat den höchsten umsatz mit einem wert von {tUms[index]}");
             Console.ReadKey();
         }
     }
