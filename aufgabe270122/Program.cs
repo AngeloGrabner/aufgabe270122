@@ -34,36 +34,15 @@ namespace Program
             Console.WriteLine($"Anschaffungskosten:{anschaffungskosten,10}\n");
             //working with the data
             //              "0123456789 123456789 123456789 123456789 123456789 123456789 1234567"
-            string header = "Nutzungsjahr 		Anfangswert 		Abschreibung 		Restwert ";
-            string[] body = new string[nutzungsdauer];
+            string header = "Nutzungsjahr       Anfangswert         Abschreibung        Restwert ";
             double anfangswert = anschaffungskosten, restwert = 0;
             const double beschreibung = 1000;
-            for (int i = 0; i < nutzungsdauer; i++)
-            {
-                body[i] += $"{i+1}";
-                for (int j = 0; j < 20 - body[i].Length; j++)
-                {
-                    body[i] += " ";
-                }
-                body[i] += $"{anfangswert}";
-                for (int j = 0; j < 40 - body[i].Length; j++)
-                {
-                    body[i] += " ";
-                }
-                body[i] += $"{beschreibung}";
-                for (int j = 0; j < 60 - body[i].Length; j++)
-                {
-                    body[i] += " ";
-                }
-                restwert = anfangswert - beschreibung;
-                body[i] += $"{restwert}";
-                anfangswert = restwert;
-            }
             Console.WriteLine(header);
-            //ouput body
             for (int i = 0; i < nutzungsdauer; i++)
             {
-                Console.WriteLine(body[i]);
+                restwert = anfangswert - beschreibung;
+                Console.WriteLine($"{i+1,-20}{anfangswert,-20}{beschreibung,-20}{restwert,-20}");
+                anfangswert = restwert;
             }
             Console.ReadKey();
         }
