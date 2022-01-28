@@ -1,0 +1,9 @@
+KDNR	Name		IFD.Umsatz
+20005	Andreas Weber	2.735,50 €
+20003	Elke Schmidt	127,50 €
+20006	Adventos GmbH	33.900,00 €
+20007	Franz Berger	938,00 €
+20008	Erich Kästner	4.122,90 €
+20001	Weller & Co KG	10.341,73 €
+20002	Elmax AG	3.169,00 €
+20010	Ferber KG	2.500,00 €
