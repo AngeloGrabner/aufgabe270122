@@ -2,6 +2,10 @@
 using System.IO;
 using System.Collections.Generic;
 
+/*
+ errors on i = 2 4 7 8 : numbers are incorrect
+ */
+
 namespace Program
 {
     public static class Program
@@ -29,7 +33,7 @@ namespace Program
                     break;
                 }
             }
-            Console.WriteLine("\n\nthe following is only for debuging\n");
+            Console.WriteLine("\n\nthe following is only for debuging\n\n");
             int startAt = inputPath.LastIndexOf('\\');
             for (int i = 0; i < startAt; i++)
             {
@@ -37,6 +41,7 @@ namespace Program
             }
             newFileName += "\\Kundendateien_erweitert.txt";
             Console.WriteLine(newFileName);
+            File.Delete(newFileName); // getting ride of an older instance of the file
             File.WriteAllText(newFileName,inputText[0]+"\n"); // writes the first line 
             for (int i = 1; i < inputText.Length; i++) //loops through all rows 
             {
@@ -49,11 +54,11 @@ namespace Program
                     Console.WriteLine($"overflow occured: {inputText.Length}");
                     profits = new char[inputText[i].Length];
                 }
-                for (int j = profitNumberStartsAt; j < inputText[i].Length; j++) 
+                for (int j = profitNumberStartsAt; j < inputText[i].Length; j++) //filling profits wich stors the number
                 {
                     profits[j - profitNumberStartsAt] = inputText[i][j]; 
                 }
-                Console.Write("unbearbeitet: ");
+                Console.Write("unedited: ");
                 foreach (char profitsChar in profits)
                 {
                     Console.Write(profitsChar);
@@ -72,33 +77,19 @@ namespace Program
                         profits[j] = profits[j + 1]; //index out of range excption
                     }
                 }
-                //bool changedKomma = false;
-                //for (int j = 0;j< profits.Length; j++) // i thourgh i would need to convert , to a .
-                //{
-                //    if (profits[j] == ',')
-                //    {
-                //        profits[j] = '.';
-                //        changedKomma = true;
-                //        //for debug
-                //        Console.Write("verarbeitet: ");
-                //        for (int k = 0; k < profits.Length; k++)
-                //            Console.Write(profits[k]);
-                //        Console.WriteLine();
-                //        break;
-                //    }
-                //}
-                Console.Write("verarbeitet: ");
+                Console.Write("edited: ");
                 for (int k = 0; k < profits.Length; k++)
                     Console.Write(profits[k]);
+                Console.WriteLine();
                 try
                 {
                     dNumber = Convert.ToDouble( new String(profits));
-                    Console.WriteLine($"worked, dNumber = {dNumber}");
+                    Console.WriteLine($"worked, dNumber = {dNumber} i = {i}\n");
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("error on converting to double");
-                    Console.WriteLine($"dNumber = {dNumber}, i = {i}");
+                    Console.WriteLine($"dNumber = {dNumber}, i = {i}\n");
                 }
                 string output = inputText[i].Replace('\n', ' ');
                 // nope i won't use Filestreams here, even tho it should be more efficient, becourse it's easier 
