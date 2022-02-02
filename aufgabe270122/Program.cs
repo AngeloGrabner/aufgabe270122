@@ -6,59 +6,17 @@ namespace Program
 {
     public static class Program
     {
-        //static int findProfitsFirstIndex(string input)
-        //{
-        //    int[] found = new int[10];
-        //    char[] numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        found[i] = Array.IndexOf<char>(input.ToCharArray(), numbers[i]);
-        //    }
-
-        //    return 0;
-        //}
-        static int findNthof(char[] input, char c, int n = 1)
-        {
-            return findNthof(input.ToString(), c, n);
-        }
-        static int findNthof(string input, char c, int n = 1) //retuns the index of the n'th char of a string or -1 if no char was found 
-        {
-            int count = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (input[i] == c)
-                    count++;
-                if (count == n)
-                {
-                    return i;
-                }          
-            }
-            return -1;
-        }
-        static int findNthofReverse(string input, char c, int n = 1) //does what findNthof() just starts with the last char and goes to the first
-        {
-            int count = 0;
-            for (int i = input.Length-1; i >=0; i--)
-            {
-                if (input[i] == c)
-                    count++;
-                if (count == n)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
         static void Main()
         {
             double dNumber = 0;
             char[] profits;
             const int profitNumberStartsAt = 20;
             string[] inputText;
+            string newFileName = @"", inputPath = @"";
+            //int errorState = 0;
             while (true)
             {
                 Console.WriteLine("geben sie den pfard zur datei ein:");
-                string? inputPath = @"";
                 inputPath = Console.ReadLine();
                 if (!File.Exists(inputPath))
                 {
@@ -71,10 +29,17 @@ namespace Program
                     break;
                 }
             }
+            Console.WriteLine("\n\nthe following is only for debuging\n");
+            int startAt = inputPath.LastIndexOf('\\');
+            for (int i = 0; i < startAt; i++)
+            {
+                newFileName += inputPath[i];
+            }
+            newFileName += "\\Kundendateien_erweitert.txt";
+            Console.WriteLine(newFileName);
+            File.WriteAllText(newFileName,inputText[0]+"\n"); // writes the first line 
             for (int i = 1; i < inputText.Length; i++) //loops through all rows 
             {
-                //converting text to number (form 2.735,50 € to 2735.5)
-                //profitNumberStartsAt = findProfitsFirstIndex(inputText[i]); coursed error | use the set location on index instedead of searching it
                 try
                 {
                     profits = new char[inputText[i].Length - profitNumberStartsAt]; //overflow
@@ -88,43 +53,70 @@ namespace Program
                 {
                     profits[j - profitNumberStartsAt] = inputText[i][j]; 
                 }
-                profits[profits.Length - 1] = ' '; //clears the '€' from the string
-                //int findPoint = findNthof(profits, '.'); 
+                Console.Write("unbearbeitet: ");
+                foreach (char profitsChar in profits)
+                {
+                    Console.Write(profitsChar);
+                }
+                Console.WriteLine();
+                profits[profits.Length - 1] = ' '; //clears the '€' from the string 
                 int findPoint = Array.IndexOf(profits, '.'); //getting rid of the dot in the number notation
                 if (findPoint == -1)
-                    Console.WriteLine("couldn't find a point");
-                for (int j = findPoint-1; j < profits.Length-1; j++) 
-                    profits[j] = profits[j + 1];
-                //int findkomma = findNthof(profits, ',');
-                bool changedKomma = false;
-                for (int j = 0;j< profits.Length; j++)
                 {
-                    if (profits[j] == ',')
+                    Console.WriteLine("couldn't find a point");
+                }
+                else
+                {
+                    for (int j = findPoint; j < profits.Length - 1; j++)
                     {
-                        profits[j] = '.';
-                        changedKomma = true;
-                        //for debug
-                        Console.Write("verarbeitet: ");
-                        for (int k = 0; k < profits.Length; k++)
-                            Console.Write(profits[k]);
-                        Console.WriteLine();
-                        break;
+                        profits[j] = profits[j + 1]; //index out of range excption
                     }
                 }
-                if (!changedKomma)
-                    Console.WriteLine("error: didn't find komma");
+                //bool changedKomma = false;
+                //for (int j = 0;j< profits.Length; j++) // i thourgh i would need to convert , to a .
+                //{
+                //    if (profits[j] == ',')
+                //    {
+                //        profits[j] = '.';
+                //        changedKomma = true;
+                //        //for debug
+                //        Console.Write("verarbeitet: ");
+                //        for (int k = 0; k < profits.Length; k++)
+                //            Console.Write(profits[k]);
+                //        Console.WriteLine();
+                //        break;
+                //    }
+                //}
+                Console.Write("verarbeitet: ");
+                for (int k = 0; k < profits.Length; k++)
+                    Console.Write(profits[k]);
                 try
                 {
-                    dNumber = Convert.ToDouble(profits.ToString());
+                    dNumber = Convert.ToDouble( new String(profits));
+                    Console.WriteLine($"worked, dNumber = {dNumber}");
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("error on converting to double");
                     Console.WriteLine($"dNumber = {dNumber}, i = {i}");
                 }
-                
+                string output = inputText[i].Replace('\n', ' ');
+                // nope i won't use Filestreams here, even tho it should be more efficient, becourse it's easier 
+                File.AppendAllText(newFileName, output);
+                if (dNumber >= 10000) // rating is A
+                {
+                    File.AppendAllText(newFileName, " -A\n");
+                }
+                else if (dNumber >= 1000) //rating is B
+                {
+                    File.AppendAllText(newFileName, " -B\n");
+                }
+                else if (dNumber < 1000) //rating is C
+                {
+                    File.AppendAllText(newFileName, " -C\n");
+                }
             }
-
+            Console.WriteLine("DONE");
             Console.ReadLine();
         }
     }
