@@ -14,7 +14,7 @@ namespace Program
         {
             double dNumber = 0;
             char[] profits;
-            const int profitNumberStartsAt = 20;
+            int profitNumberStartsAt = 0;
             string[] inputText;
             string newFileName = @"", inputPath = @"";
             //int errorState = 0;
@@ -45,6 +45,7 @@ namespace Program
             File.WriteAllText(newFileName,inputText[0]+"\n"); // writes the first line 
             for (int i = 1; i < inputText.Length; i++) //loops through all rows 
             {
+                profitNumberStartsAt = inputText[i].LastIndexOf('\t'); //this could work
                 try
                 {
                     profits = new char[inputText[i].Length - profitNumberStartsAt]; //overflow
@@ -54,11 +55,13 @@ namespace Program
                     Console.WriteLine($"overflow occured: {inputText.Length}");
                     profits = new char[inputText[i].Length];
                 }
+                Console.Write("from inputText: ");
                 for (int j = profitNumberStartsAt; j < inputText[i].Length; j++) //filling profits wich stors the number
                 {
-                    profits[j - profitNumberStartsAt] = inputText[i][j]; 
+                    profits[j - profitNumberStartsAt] = inputText[i][j]; //profitsNumberStartsAt is not const
+                    Console.Write(inputText[i][j]);
                 }
-                Console.Write("unedited: ");
+                Console.Write("\nunedited: ");
                 foreach (char profitsChar in profits)
                 {
                     Console.Write(profitsChar);
@@ -66,9 +69,10 @@ namespace Program
                 Console.WriteLine();
                 profits[profits.Length - 1] = ' '; //clears the '€' from the string 
                 int findPoint = Array.IndexOf(profits, '.'); //getting rid of the dot in the number notation
+                Console.WriteLine($"\tfindpoint = {findPoint}");
                 if (findPoint == -1)
                 {
-                    Console.WriteLine("couldn't find a point");
+                    Console.WriteLine("\tcouldn't find a point"); // the nomber error is related to this
                 }
                 else
                 {
